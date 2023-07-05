@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-#Data Model
+# Data Model
 
 # class User(Model):
 #     id = fields.IntField(pk= True)

@@ -3,12 +3,14 @@ import model
 from config import engine
 import router
 
-model.Base.metadata.create_all(bind = engine)
+model.Base.metadata.create_all(bind=engine)
 
-app : FastAPI()
+app: FastAPI()
 
-@app.get('/')
+
+@app.get("/")
 async def Home():
     return "Welcome Home"
 
-app.include_router(router.router, prefix = "/user", tags = ["user"])
+
+app.include_router(router.router, prefix="/user", tags=["user"])
