@@ -15,29 +15,19 @@ class PostSchema(BaseModel):
             }
         }
 
-class ShedSchema(BaseModel):
-
-    time_alert_sec : int = Field (default= 600)
-
-    class Config:
-
-        schema_exp = {
-            "shed_demo" : {
-                "time_alert_sec" : 600
-            }
-        }
-
 class AlertSchema(BaseModel) :
 
-    upper_or_lower : str = Field(default= None)
+    upper_or_lower : str = Field(default = None)
     value_alert : int = Field(defaut = None)
+    setup_time_min : int = Field(default = None)
 
     class Config :
 
         schema_exemple = {
             "alert_demo" : {
                 "upper_or_lower" : "lower",
-                "value_alert" : 20000
+                "value_alert" : 20000,
+                "setup_time_min" : 10
             }
         }
 

@@ -1,10 +1,12 @@
 import uvicorn
 import sys
+import asyncio, schedule
 import requests, time, sched
 from datetime import datetime
 from decouple import config
 from fastapi import FastAPI, Body, Depends, HTTPException
 from models import AlertSchema, ShedSchema, PostSchema, UserSchema, UserLoginSchema
+from aux_function import run_alert, schedule_task, background_scheduler
 from auth.jwt_handler import signJWT
 from auth.jwt_bearer import jwtBearer
 
@@ -103,11 +105,7 @@ def get_coinBTC():
 
 # 6.Create an alert
 
-"""Function to verify alert value"""
-
-
 @app.post("/alert",dependencies= [Depends(jwtBearer())], tags= ["alerts"])
-
 def add_alert(alert: AlertSchema = Body(default= None)):
 
     if alert.upper_or_lower == "lower" or alert.upper_or_lower == "upper" :
@@ -115,18 +113,16 @@ def add_alert(alert: AlertSchema = Body(default= None)):
     else:
         raise HTTPException(status_code= 404, detail= "incorrect input")
 
-def check_alert():
-    alert = alerts[0]
-    response = {"message" : "alert activate"}
 
-    if alert.upper_or_lower == "lower" :
+# 6.Manage notif
 
-        if alert.value_alert > get_coinBTC()["Current value of BTC in USD"] :
-            response = {"message" : f"Carefull, the value of BTC in USD is lower than {alert.value_alert} from now"}
+@app.post("/start-notif", dependencies= [Depends(jwtBearer())], tags= ["notif"])
+async def start_notif(background_scheduler):
 
-    if alert.upper_or_lower == "upper" :
+    asyncio.create_task(background_scheduler())
+    return {"message": "Notif started"}
 
-        if alert.value_alert < get_coinBTC()["Current value of BTC in USD"] :
-            response = {"message" : f"Carefull, the value of BTC in USD is upper than {alert.value_alert} from now"}
-
-    return response
+@app.post("/stop-notif", dependencies= [Depends(jwtBearer())], tags= ["notif"])
+async def stop_notif():
+    schedule.clear()
+    return {"message": "Notif stopped"}
