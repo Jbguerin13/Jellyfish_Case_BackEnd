@@ -1,16 +1,67 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, EmailStr
 
-# Data Model
+class PostSchema(BaseModel):
 
-# class User(Model):
-#     id = fields.IntField(pk= True)
-#     fullname =  fields.CharField(100, unique= True)  #Change fullname --> username
-#     password = fields.CharField(200)
-#     alerts : fields.ReverseRelation["Alert"]
+    id : int = Field(default= None)
+    title : str = Field(default= None)
+    content : str = Field(default= None)
 
-# class Alert(Model):
-#     user : fields.ForeignKeyRelation[User] = fields.ForeignKeyField(
-#         "models.User", related_name= "alerts")
-#     id = fields.IntField(pk= True)
-#     alert_above_or_under_value = fields.CharField(50, unique= True)
-#     value_dollar = fields.IntField(pk= True)
+    class Config:
+
+        schema_extra = {
+            "post_demo" :{
+                "title" : "some title exemple",
+                "content" : "some content example"
+            }
+        }
+
+class ShedSchema(BaseModel):
+
+    time_alert_sec : int = Field (default= 600)
+
+    class Config:
+
+        schema_exp = {
+            "shed_demo" : {
+                "time_alert_sec" : 600
+            }
+        }
+
+class AlertSchema(BaseModel) :
+
+    upper_or_lower : str = Field(default= None)
+    value_alert : int = Field(defaut = None)
+
+    class Config :
+
+        schema_exemple = {
+            "alert_demo" : {
+                "upper_or_lower" : "lower",
+                "value_alert" : 20000
+            }
+        }
+
+class UserSchema(BaseModel):
+
+    fullname : str = Field(default= None)
+    email : EmailStr = Field(default= None)
+    password : str = Field(default= None)
+    class Config:
+        the_schema = {
+            "user_demo" :{
+                "name" : "tigrus",
+                "email" : "tigrus@gmail.com",
+                "password" : "123abc"
+            }
+        }
+
+class UserLoginSchema(BaseModel):
+    email : EmailStr = Field(default= None)
+    password : str = Field(default= None)
+    class Config:
+        the_schema = {
+            "user_demo" :{
+                "email" : "tigrus@gmail.com",
+                "password" : "123abc"
+            }
+        }
