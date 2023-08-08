@@ -1,22 +1,31 @@
 from pydantic import BaseModel, Field, EmailStr
-from sqlalchemy import BOOLEAN, column, ForeignKey, Integer, String
-from database import Base, engine, SessionLocal
-from sqlalchemy.orm import Session
-from typing import List, Annotated
+from sqlalchemy import BOOLEAN, Column, ForeignKey, Integer, String
+from database import engine, SessionLocal
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import MappedAsDataclass
+from typing import List, Annotated, Optional
 from fastapi import Depends
-from passlib.hash import bcrypt
+from uuid import uuid4
 
-
+"""Alert model management"""
 #Class defining the table "alerts" in the DB
+class Base(DeclarativeBase, MappedAsDataclass):
+    pass
 
-class Alert(Base):
+class Mixin:
+    create_alert : Mapped[int] = mapped_column()
+    update_alert : Mapped[Optional[int]] = mapped_column(default= None, init= False)
+
+class Alert(Base, Mixin):
     __tablename__ = "alerts"
 
-    alert_id = column(Integer, primary_key = True, index= True)
-    user_id = column(Integer, ForeignKey("users.id"))
-    upper_or_lower = column(String, index= True)
-    value_alert : column(Integer, index= True)
-    setup_time_min : column(Integer, index= True)
+    alert_id : Mapped[int] = mapped_column(primary_key = True, index= True)
+    user_id : Mapped[int] = mapped_column(ForeignKey("user.id"))
+    value_alert : Mapped[int] = mapped_column()
+    setup_time_min : Mapped[int] = mapped_column()
+    upper_or_lower : Mapped[str] = mapped_column()
 
 
 #Class defining the model "Alert" that the user will complete to crud an alert
@@ -37,15 +46,16 @@ class AlertSchema(BaseModel) :
             }
         }
 
+"""User model management"""
 
 #Class defining the table "User" that the user will complete
 
 class User(Base):
     __tablename__ = "users"
 
-    user_id = column(Integer, primary_key = True, index= True)
-    email : column(EmailStr, index= True)
-    password : column(String, index= True)
+    user_id = Column(Integer, primary_key = True, index= True)
+    email : Column(EmailStr, index= True)
+    password : Column(String, index= True)
 
 
 #Class defining the model "User" that the user will complete to crud a new user

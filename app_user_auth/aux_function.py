@@ -1,5 +1,5 @@
 import schedule, time, asyncio
-from mains import get_coinBTC, add_alert
+from mains import get_coinBTC
 from models import AlertSchema
 from fastapi import FastAPI, Body, Depends, HTTPException
 
