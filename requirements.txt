@@ -1,7 +1,0 @@
-uvicorn
-fastapi
-python - multipart
-tortoise - orm
-passlib
-bcrypt
-pyjwt

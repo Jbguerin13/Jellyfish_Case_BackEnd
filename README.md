@@ -81,3 +81,58 @@ Frustrated by the part above and having failed to connect a database to my crud,
 # Conclusion
 
 I'm aware that my work isn't finished in its current state before the interview, but I'd like to highlight that I've learned many notions in a very short space of time, and that it's important for me to try and come to terms with it over the next few days.
+
+
+# Readme
+
+## Getting started
+
+### Prerequisites
+Install poetry and pyenv:
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+poetry config virtualenvs.in-project true
+
+brew install pyenv make
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+```
+
+Install python 3.11.0 and ask poetry to use it
+```bash
+pyenv install 3.11.0
+pyenv local 3.11.0
+poetry env use 3.11.0
+```
+
+### Install dependencies
+```bash
+poetry install
+```
+
+### Add a new package
+```bash
+poetry add package_name
+```
+
+### Run tests
+```bash
+poetry run pytest
+```
+or by watching file changes
+```bash
+poetry run pytest-watch
+```
+
+### Run linter
+```bash
+poetry run black src
+poetry run pylint src
+poetry run mypy src
+```
+
+### Run
+```bash
+poetry run uvicorn api.entrypoint:app --reload
+```
