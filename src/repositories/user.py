@@ -1,6 +1,4 @@
-from sqlalchemy.orm import Session
-from pydantic import EmailStr
-from models import User, UserSchema, db_dependency, Alert
+from sqlmodel import Session
 
 # Get all data from user table
 
@@ -25,7 +23,7 @@ def remove_user(db: Session, user_id: int):
 # function to Update user and alert data
 
 
-def update_user(db: Session, user_id: int, email: EmailStr, password: str):
+def update_user(db: Session, user_id: int, email: str, password: str):
     db_user = get_user_by_id(db=db, user_id=user_id)
     db_user.email = email
     db_user.password = password

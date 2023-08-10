@@ -2,13 +2,15 @@ import uvicorn
 import sys
 import asyncio, schedule
 from datetime import datetime
-from fastapi import FastAPI, Body, Depends, HTTPException
+from fastapi import FastAPI
 # from auth.jwt_handler import signJWT
 # from auth.jwt_bearer import jwtBearer
 from sqlmodel import Field, SQLModel, Session, select
 from typing import Optional
-from .entrypoint import app  #peut-être un pb d'import circulaire ici
+from .entrypoint import app
 from ..database import engine
+# from .entrypoint import app  #peut-être un pb d'import circulaire ici
+# from ..database import engine
 
 """User model management"""
 
@@ -22,9 +24,6 @@ class User(SQLModel, table=True):
     password: str
 
 
-# 1.user signup [create a new user]
-
-
 @app.post("/user/signup", tags=["User"])
 async def user_signup(user: User):
     with Session(engine) as session :
@@ -32,6 +31,35 @@ async def user_signup(user: User):
         session.commit()
         session.refresh(user)
         return user
+
+
+# def get_user_by_id(db: Session, user_id: int):
+#     return db.execute(select(User).where(User.id == user_id)).first()
+
+# @app.post("/user/update", tags=["User"])
+# def update_user(user_id: int, email: str, password: str):
+#     with Session(engine) as session:
+#         db_user = get_user_by_id(db=session, user_id=user_id)
+#         if db_user:
+#             db_user.email = email
+#             db_user.password = password
+#             session.commit()
+#             return {"message": "User correctly updated"}
+#         else:
+#             return {"message": "User not found"}
+
+
+# @app.post("/user/remove", tags=["User"])
+# def remove_user(user_id: int):
+#     with Session(engine) as session :
+#         db_user = get_user_by_id(db= session, user_id= user_id)
+#         if db_user:
+#             session.delete(db_user)
+#             session.commit()
+#             return {"message" : "User correctly deleted"}
+#         else:
+#             return {"message" : "User nor found"}
+
 
     # return signJWT(user.email)
 

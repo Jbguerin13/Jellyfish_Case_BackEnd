@@ -9,6 +9,4 @@ from ..database import engine
 
 SQLModel.metadata.create_all(engine)
 
-
-
 #Si jamais pb import circu, mettre les from . import fichiers après app
